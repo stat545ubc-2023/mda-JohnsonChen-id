@@ -200,7 +200,7 @@ glimpse(cancer_sample)
     ## $ fractal_dimension_worst <dbl> 0.11890, 0.08902, 0.08758, 0.17300, 0.07678, 0…
 
 ``` r
-table(cancer_sample$diagnosis)
+table(cancer_sample$diagnosis) # We can count each category by this 
 ```
 
     ## 
@@ -406,7 +406,7 @@ ggplot(cancer_sample, aes(x = radius_mean)) + geom_histogram(bins = 40)
 
 ![](mini-project-1_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-- The distribution of *radius_mean* is plotted above.
+- The distribution of *radius_mean* is plotted above using a histogram.
 
 - When finding trends, it is often helpful to first look directly at the
   distribution of a variable to see its general trend and some potential
@@ -420,7 +420,7 @@ Q3:
 
 ``` r
 ### EXPLORE cancer_sample HERE ###
-nas <- colSums(is.na(cancer_sample))
+nas <- colSums(is.na(cancer_sample)) # Taking sum of all TRUEs (TRUE = 1)
 ggplot(data.frame(nas,cols = colnames(cancer_sample))) + geom_bar(aes(x = cols, y = nas),stat = "identity") + ylim(0, 5) + coord_flip()
 ```
 
