@@ -1,6 +1,8 @@
 ---
 title: "Mini Data-Analysis Deliverable 1"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 # Welcome to your (maybe) first-ever data analysis project!
@@ -80,14 +82,12 @@ And that is exactly the first thing that you will do!
 
 1.1 **(1 point)** Out of the 7 datasets available in the `datateachr` package, choose **4** that appeal to you based on their description. Write your choices below:
 
-**Note**: We encourage you to use the ones in the `datateachr` package, but if you have a dataset that you'd really like to use, you can include it here. But, please check with a member of the teaching team to see whether the dataset is of appropriate complexity. Also, include a **brief** description of the dataset here to help the teaching team understand your data.
-
 <!-------------------------- Start your work below ---------------------------->
 
-1: CHOICE_1\_HERE\
-2: CHOICE_2\_HERE\
-3: CHOICE_3\_HERE\
-4: CHOICE_4\_HERE
+1: cancer_sample
+2: flow_sample
+3: building_permits
+4: parking_meters
 
 <!----------------------------------------------------------------------------->
 
@@ -96,18 +96,37 @@ And that is exactly the first thing that you will do!
 *Hint:* This is one of those times when you should think about the cleanliness of your analysis. I added a single code chunk for you below, but do you want to use more than one? Would you like to write more comments outside of the code chunk?
 
 <!-------------------------- Start your work below ---------------------------->
+In our exploration, we would intentionally separate the ID column out since when working with the data manipulation and visualization, ID is something we cannot and should not include normally. 
 
 ```{r}
-### EXPLORE HERE ###
-steam_games
+### EXPLORE cancer_sample HERE ###
+glimpse(cancer_sample)
+table(cancer_sample$diagnosis)
 ```
+A few attributes of interest in cancer-sample dataset is: there are 32 columns, with 1 character column (*diagnosis*) which we can turn into a categorical variable (factor), 1 id column and 30 numerical variables. There are 569 data entries (rows) in the dataset. 
 
+```{r}
+### EXPLORE flow_sample HERE ###
+glimpse(flow_sample)
+table(flow_sample$station_id)
+```
+A few attributes of interest in flow-sample dataset is: there are 7 columns, with 3 character column (*station_id*, *extreme_type* and *sym*) which we can turn into categorical variables (factor)and 4 numerical variables. Three of the four numerical variables are to represent date across the dataset. There are 218 data entries (rows) in the dataset. 
+```{r}
+### EXPLORE building_permits HERE ###
+glimpse(building_permits)
+```
+A few attributes of interest in building_permits dataset is: there are 14 columns, with 10 character column, 1 date column and 3 numerical variables. It seems like some variables can be used for analysis and visualization while some others are more for reference purposes. There are 20680 data entries (rows) in the dataset. 
+```{r}
+### EXPLORE parking_meters HERE ###
+glimpse(parking_meters)
+```
+A few attributes of interest in parking_meters dataset is: there are 22 columns, with 20 character column and 2 numerical variables. It seems like *meter_id* might be an id column while most other character columns can be used as categorical variables. There are 10032 data entries (rows) in the dataset. 
 <!----------------------------------------------------------------------------->
 
 1.3 **(1 point)** Now that you've explored the 4 datasets that you were initially most interested in, let's narrow it down to 1. What lead you to choose this one? Briefly explain your choice below.
 
 <!-------------------------- Start your work below ---------------------------->
-
+I choose the *cancer_sample* dataset. There are many reasons behind this choice, including the existence of categorical variable and various quantitative variable that we can manipulate and visualize. These variables are presented clearer than the other datasets that we explored.
 <!----------------------------------------------------------------------------->
 
 1.4 **(2 points)** Time for a  final decision! Going back to the beginning, it's important to have an *end goal* in mind. For example, if I had chosen the `titanic` dataset for my project, I might've wanted to explore the relationship between survival and other variables. Try to think of 1 research question that you would want to answer with your dataset. Note it down below.
@@ -122,7 +141,7 @@ Read Tasks 2 and 3 *fully* before starting to complete either of them. Probably 
 
 This project is semi-guided, but meant to be *independent*. For this reason, you will complete tasks 2 and 3 below (under the **START HERE** mark) as if you were writing your own exploratory data analysis report, and this guidance never existed! Feel free to add a brief introduction section to your project, format the document with markdown syntax as you deem appropriate, and structure the analysis as you deem appropriate. If you feel lost, you can find a sample data analysis [here](https://www.kaggle.com/headsortails/tidy-titarnic) to have a better idea. However, bear in mind that it is **just an example** and you will not be required to have that level of complexity in your project.
 
-# Task 2: Exploring your dataset 
+# Task 2: Exploring your dataset
 
 If we rewind and go back to the learning objectives, you'll see that by the end of this deliverable, you should have formulated *4* research questions about your data that you may want to answer during your project. However, it may be handy to do some more exploration on your dataset of choice before creating these questions - by looking at the data, you may get more ideas. **Before you start this task, read all instructions carefully until you reach START HERE under Task 3**.
 
@@ -142,6 +161,8 @@ Make sure that you're using dplyr and ggplot2 rather than base R for this task. 
 2.2 **(4 points)** For each of the 4 exercises that you complete, provide a *brief explanation* of why you chose that exercise in relation to your data (in other words, why does it make sense to do that?), and sufficient comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
+
+
 
 <!----------------------------------------------------------------------------->
 
