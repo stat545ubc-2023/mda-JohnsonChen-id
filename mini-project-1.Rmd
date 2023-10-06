@@ -1,8 +1,7 @@
 ---
 title: "Mini Data-Analysis Deliverable 1"
 output:
-  pdf_document: default
-  html_document: default
+  github_document: default
 ---
 
 # Welcome to your (maybe) first-ever data analysis project!
@@ -132,7 +131,7 @@ I choose the *cancer_sample* dataset. There are many reasons behind this choice,
 1.4 **(2 points)** Time for a  final decision! Going back to the beginning, it's important to have an *end goal* in mind. For example, if I had chosen the `titanic` dataset for my project, I might've wanted to explore the relationship between survival and other variables. Try to think of 1 research question that you would want to answer with your dataset. Note it down below.
 
 <!-------------------------- Start your work below ---------------------------->
-
+I wish to find out what are some variables within this cancer dataset that might potentially have an impact on cancer diagnosis.
 <!----------------------------------------------------------------------------->
 
 # Important note
@@ -161,8 +160,47 @@ Make sure that you're using dplyr and ggplot2 rather than base R for this task. 
 2.2 **(4 points)** For each of the 4 exercises that you complete, provide a *brief explanation* of why you chose that exercise in relation to your data (in other words, why does it make sense to do that?), and sufficient comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
+Q1:
+```{r}
+### EXPLORE cancer_sample HERE ###
+ggplot(cancer_sample, aes(x = radius_mean)) + geom_histogram(bins = 40)
+```
+The distribution of *radius_mean* is plotted above. 
 
+When finding trends, it is often helpful to first look directly at the distribution of a variable to see its general trend and some potential differences and outliers for relationship between variables. 
 
+I choose radius mean as our first indicator since the radius intuitively have a significant impact of whether the cancer is diagnosed with benign or malignant.
+
+Q3:
+```{r}
+### EXPLORE cancer_sample HERE ###
+nas <- colSums(is.na(cancer_sample))
+ggplot(data.frame(nas,cols = colnames(cancer_sample))) + geom_bar(aes(x = cols, y = nas),stat = "identity") + ylim(0, 5) + coord_flip()
+```
+As shown above using _colSums_, we have no NAs in our entire dataset. 
+
+It is always helpful to see how many NAs in our dataset and which variable they are from, so we could decide what to do with those data entry which includes the NA values. If a variable involves too many NAs, we often need to take causion when analysing and comparing it to others, since the remaining entries might not represent the entire dataset well. 
+
+In our cancer dataset, we have no NA values across the entire dataset. This is a significant indicator that our dataset is tidy and further analysis and conclusion can be drawn with more confidence.
+
+Q4:
+```{r}
+### EXPLORE cancer_sample HERE ###
+ggplot(cancer_sample, aes(x = radius_mean, color = diagnosis)) + geom_histogram(bins = 40)
+```
+This is significant results! We wish to see the relationship between *radius_mean*, the mean radius of cancer and the *diagnosis*, the diagnosis results of the specific cancer region. We can directly see that in the Benign case, the mean radius is strongly centered around 13,  while in the malignant case it is much more spread out and higher in value. 
+
+Explore the relationship between variables are trivial in analysis. When we plot two quantitative variables on the same graph, we might find out is if a linear or exponential distribution is present, or if a strong correlation exists between the variables.
+
+Q7:
+```{r}
+### EXPLORE cancer_sample HERE ###
+analysis <- cancer_sample %>% select(diagnosis,ends_with("_mean"))
+head(analysis)
+```
+I wish to find which mean variable has a significant impact or correlation to the diagnosis. The best case scenario is to filter out the outliers or make a threshold to study part of the data entries, but my current understanding of the dataset and clinical cancer knowledge is not enough to do so. 
+
+Making a new tibble with only the subset can assist us in simplifying and clarify our work when generating reports or working on analysis. If we wish to build models for prediction, focusing on less columns can help us build model more effectively.
 
 <!----------------------------------------------------------------------------->
 
