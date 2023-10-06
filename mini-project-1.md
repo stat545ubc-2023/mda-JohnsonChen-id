@@ -207,10 +207,10 @@ table(cancer_sample$diagnosis)
     ##   B   M 
     ## 357 212
 
-A few attributes of interest in cancer-sample dataset is: there are 32
-columns, with 1 character column (*diagnosis*) which we can turn into a
-categorical variable (factor), 1 id column and 30 numerical variables.
-There are 569 data entries (rows) in the dataset.
+- A few attributes of interest in cancer-sample dataset is: there are 32
+  columns, with 1 character column (*diagnosis*) which we can turn into
+  a categorical variable (factor), 1 id column and 30 numerical
+  variables. There are 569 data entries (rows) in the dataset.
 
 ``` r
 ### EXPLORE flow_sample HERE ###
@@ -235,12 +235,12 @@ table(flow_sample$station_id)
     ## 05BB001 
     ##     218
 
-A few attributes of interest in flow-sample dataset is: there are 7
-columns, with 3 character column (*station_id*, *extreme_type* and
-*sym*) which we can turn into categorical variables (factor)and 4
-numerical variables. Three of the four numerical variables are to
-represent date across the dataset. There are 218 data entries (rows) in
-the dataset.
+- A few attributes of interest in flow-sample dataset is: there are 7
+  columns, with 3 character column (*station_id*, *extreme_type* and
+  *sym*) which we can turn into categorical variables (factor)and 4
+  numerical variables. Three of the four numerical variables are to
+  represent date across the dataset. There are 218 data entries (rows)
+  in the dataset.
 
 ``` r
 ### EXPLORE building_permits HERE ###
@@ -264,11 +264,11 @@ glimpse(building_permits)
     ## $ year                        <dbl> 2017, 2017, 2017, 2017, 2017, 2017, 2017, …
     ## $ bi_id                       <dbl> 524, 535, 539, 541, 543, 546, 547, 548, 54…
 
-A few attributes of interest in building_permits dataset is: there are
-14 columns, with 10 character column, 1 date column and 3 numerical
-variables. It seems like some variables can be used for analysis and
-visualization while some others are more for reference purposes. There
-are 20680 data entries (rows) in the dataset.
+- A few attributes of interest in building_permits dataset is: there are
+  14 columns, with 10 character column, 1 date column and 3 numerical
+  variables. It seems like some variables can be used for analysis and
+  visualization while some others are more for reference purposes. There
+  are 20680 data entries (rows) in the dataset.
 
 ``` r
 ### EXPLORE parking_meters HERE ###
@@ -300,12 +300,12 @@ glimpse(parking_meters)
     ## $ geo_local_area <chr> "West End", "Strathcona", "Riley Park", "West Point Gre…
     ## $ meter_id       <chr> "670805", "471405", "C80145", "D03704", "301023", "5913…
 
-A few attributes of interest in parking_meters dataset is: there are 22
-columns, with 20 character column and 2 numerical variables. It seems
-like *meter_id* might be an id column while most other character columns
-can be used as categorical variables. There are 10032 data entries
-(rows) in the dataset.
-<!----------------------------------------------------------------------------->
+- A few attributes of interest in parking_meters dataset is: there are
+  22 columns, with 20 character column and 2 numerical variables. It
+  seems like *meter_id* might be an id column while most other character
+  columns can be used as categorical variables. There are 10032 data
+  entries (rows) in the dataset.
+  <!----------------------------------------------------------------------------->
 
 1.3 **(1 point)** Now that you’ve explored the 4 datasets that you were
 initially most interested in, let’s narrow it down to 1. What lead you
@@ -313,12 +313,12 @@ to choose this one? Briefly explain your choice below.
 
 <!-------------------------- Start your work below ---------------------------->
 
-I choose the *cancer_sample* dataset. There are many reasons behind this
-choice, including the existence of categorical variable and various
-quantitative variable that we can manipulate and visualize. These
-variables are presented clearer than the other datasets that we
-explored.
-<!----------------------------------------------------------------------------->
+- I choose the *cancer_sample* dataset. There are many reasons behind
+  this choice, including the existence of categorical variable and
+  various quantitative variable that we can manipulate and visualize.
+  These variables are presented clearer than the other datasets that we
+  explored.
+  <!----------------------------------------------------------------------------->
 
 1.4 **(2 points)** Time for a final decision! Going back to the
 beginning, it’s important to have an *end goal* in mind. For example, if
@@ -329,9 +329,9 @@ dataset. Note it down below.
 
 <!-------------------------- Start your work below ---------------------------->
 
-I wish to find out what are some variables within this cancer dataset
-that might potentially have an impact on cancer diagnosis.
-<!----------------------------------------------------------------------------->
+- I wish to find out what are some variables within this cancer dataset
+  that potentially have an impact on cancer diagnosis.
+  <!----------------------------------------------------------------------------->
 
 # Important note
 
@@ -404,16 +404,17 @@ Q1:
 ggplot(cancer_sample, aes(x = radius_mean)) + geom_histogram(bins = 40)
 ```
 
-![](mini-project-1_files/figure-gfm/unnamed-chunk-6-1.png)<!-- --> The
-distribution of *radius_mean* is plotted above.
+![](mini-project-1_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-When finding trends, it is often helpful to first look directly at the
-distribution of a variable to see its general trend and some potential
-differences and outliers for relationship between variables.
+- The distribution of *radius_mean* is plotted above.
 
-I choose radius mean as our first indicator since the radius intuitively
-have a significant impact of whether the cancer is diagnosed with benign
-or malignant.
+- When finding trends, it is often helpful to first look directly at the
+  distribution of a variable to see its general trend and some potential
+  differences and outliers for relationship between variables.
+
+- I choose radius mean as our first indicator since the radius
+  intuitively have a significant impact of whether the cancer is
+  diagnosed with benign or malignant.
 
 Q3:
 
@@ -423,38 +424,41 @@ nas <- colSums(is.na(cancer_sample))
 ggplot(data.frame(nas,cols = colnames(cancer_sample))) + geom_bar(aes(x = cols, y = nas),stat = "identity") + ylim(0, 5) + coord_flip()
 ```
 
-![](mini-project-1_files/figure-gfm/unnamed-chunk-7-1.png)<!-- --> As
-shown above using *colSums*, we have no NAs in our entire dataset.
+![](mini-project-1_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
-It is always helpful to see how many NAs in our dataset and which
-variable they are from, so we could decide what to do with those data
-entry which includes the NA values. If a variable involves too many NAs,
-we often need to take causion when analysing and comparing it to others,
-since the remaining entries might not represent the entire dataset well.
+- As shown above using *colSums*, we have no NAs in our entire dataset.
 
-In our cancer dataset, we have no NA values across the entire dataset.
-This is a significant indicator that our dataset is tidy and further
-analysis and conclusion can be drawn with more confidence.
+- It is always helpful to see how many NAs in our dataset and which
+  variable they are from, so we could decide what to do with those data
+  entry which includes the NA values. If a variable involves too many
+  NAs, we often need to take causion when analysing and comparing it to
+  others, since the remaining entries might not represent the entire
+  dataset well.
+
+- In our cancer dataset, we have no NA values across the entire dataset.
+  This is a significant indicator that our dataset is tidy and further
+  analysis and conclusion can be drawn with more confidence.
 
 Q4:
 
 ``` r
 ### EXPLORE cancer_sample HERE ###
-ggplot(cancer_sample, aes(x = radius_mean, color = diagnosis)) + geom_histogram(bins = 40)
+ggplot(cancer_sample, aes(x = radius_mean, color = diagnosis)) + geom_histogram(bins = 40) + theme_classic()
 ```
 
-![](mini-project-1_files/figure-gfm/unnamed-chunk-8-1.png)<!-- --> This
-is significant results! We wish to see the relationship between
-*radius_mean*, the mean radius of cancer and the *diagnosis*, the
-diagnosis results of the specific cancer region. We can directly see
-that in the Benign case, the mean radius is strongly centered around 13,
-while in the malignant case it is much more spread out and higher in
-value.
+![](mini-project-1_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
-Explore the relationship between variables are trivial in analysis. When
-we plot two quantitative variables on the same graph, we might find out
-is if a linear or exponential distribution is present, or if a strong
-correlation exists between the variables.
+- This is significant results! We wish to see the relationship between
+  *radius_mean*, the mean radius of cancer and the *diagnosis*, the
+  diagnosis results of the specific cancer region. We can directly see
+  that in the Benign case, the mean radius is strongly centered around
+  13, while in the malignant case it is much more spread out and higher
+  in value.
+
+- Explore the relationship between variables are trivial in analysis.
+  When we plot two quantitative variables on the same graph, we might
+  find out is if a linear or exponential distribution is present, or if
+  a strong correlation exists between the variables.
 
 Q7:
 
@@ -477,16 +481,16 @@ head(analysis)
     ## #   concave_points_mean <dbl>, symmetry_mean <dbl>,
     ## #   fractal_dimension_mean <dbl>
 
-I wish to find which mean variable has a significant impact or
-correlation to the diagnosis. The best case scenario is to filter out
-the outliers or make a threshold to study part of the data entries, but
-my current understanding of the dataset and clinical cancer knowledge is
-not enough to do so.
+- I wish to find which mean variable has a significant impact or
+  correlation to the diagnosis. The best case scenario is to filter out
+  the outliers or make a threshold to study part of the data entries,
+  but my current understanding of the dataset and clinical cancer
+  knowledge is not enough to do so.
 
-Making a new tibble with only the subset can assist us in simplifying
-and clarify our work when generating reports or working on analysis. If
-we wish to build models for prediction, focusing on less columns can
-help us build model more effectively.
+- Making a new tibble with only the subset can assist us in simplifying
+  and clarify our work when generating reports or working on analysis.
+  If we wish to build models for prediction, focusing on less columns
+  can help us build model more effectively.
 
 <!----------------------------------------------------------------------------->
 
@@ -499,6 +503,20 @@ research question that interested you (Task 1.4). Now it’s time to pick
 Write the 4 questions and any additional comments below.
 
 <!--- *****START HERE***** --->
+
+1.  In the mean variables, what are some of the highest correlated
+    variables with the diagnosis results?
+2.  What variables presents significant difference in distribution
+    between Benign and Malignant cases?
+3.  Is there any significant correlation between quantitative variables?
+4.  If we wish to predict on the outcome of diagnosis using the
+    quantitative variables given, how accurate can we accomplish?
+
+Over these research questions, we wish to dive deep into the
+distribution and correlation between variables, and eventually how well
+we can predict our outcome of diagnosis using them. We need to learn
+which is highest correlated with diagnosis, but there might also be high
+correlations between variables that we need to be cautious about.
 <!----------------------------->
 
 # Overall reproducibility/Cleanliness/Coherence Checklist
