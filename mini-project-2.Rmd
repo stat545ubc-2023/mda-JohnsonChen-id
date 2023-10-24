@@ -157,8 +157,8 @@ Summarize Task:
 We will try use the cancer_area dataset to do T4. 
 
 ```{r}
-cancer_area %>% group_by(diagnosis, area_mean_fct) %>% summarise(n = n(), .groups = 'drop') %>% mutate(prop = n/sum(n))
-
+cancer_area_factor <- cancer_area %>% group_by(diagnosis, area_mean_fct) %>% summarise(n = n(), .groups = 'drop') %>% mutate(prop = n/sum(n))
+cancer_area_factor
 ```
 
 From T4, we can see interesting results when we count the observation and proportion of Diagnosis versus Mean area. We suprising see only five categories existing, with normal and small areas as benign but some large and very large area categories as malignant.
@@ -353,8 +353,10 @@ Take a summary table that you made from Task 1, and write it as a csv file in yo
 -   **Reproducibility criteria**: You should be able to delete the csv file, and remake it simply by knitting this Rmd file.
 
 <!-------------------------- Start your work below ---------------------------->
-
-
+```{r}
+library(here)
+write_csv(cancer_area_factor, here::here("output/cancer_area_factor.csv"))
+```
 <!----------------------------------------------------------------------------->
 
 ## 4.2 (3 points)
@@ -364,6 +366,10 @@ Write your model object from Task 3 to an R binary file (an RDS), and load it ag
 -   The same robustness and reproducibility criteria as in 4.1 apply here.
 
 <!-------------------------- Start your work below ---------------------------->
+```{r}
+saveRDS(model,here::here("output/model.rds"))
+readRDS(here::here("output/model.rds"))
+```
 
 <!----------------------------------------------------------------------------->
 
