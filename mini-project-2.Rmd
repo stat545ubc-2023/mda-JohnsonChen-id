@@ -56,10 +56,10 @@ From milestone 1, you should have an idea of the basic structure of your dataset
 First, write out the 4 research questions you defined in milestone 1 were. This will guide your work through milestone 2:
 
 <!-------------------------- Start your work below ---------------------------->
-1. *FILL_THIS_IN*
-2. *FILL_THIS_IN*
-3. *FILL_THIS_IN*
-4. *FILL_THIS_IN*
+1.  In the mean variables, what are some of the highest correlated variables with the diagnosis results?
+2.  What variables presents significant difference in distribution between Benign and Malignant cases?
+3.  Is there any significant correlation between quantitative variables?
+4.  If we wish to predict on the outcome of diagnosis using the quantitative variables given, how accurate can we accomplish?
 <!----------------------------------------------------------------------------->
 
 Here, we will investigate your data using various data manipulation and graphing functions.
@@ -93,6 +93,89 @@ Make sure it's clear what research question you are doing each operation for!
 
 <!------------------------- Start your work below ----------------------------->
 
+1.  In the mean variables, what are some of the highest correlated variables with the diagnosis results?
+Summarize Task:
+```{r}
+diagnosis_count <- cancer_sample %>% group_by(diagnosis) %>% summarize(n = n())
+diagnosis_count
+```
+From T2, the number of observations for Benign is 357 while Malignant is 212. The observation count for Benign case is roughly 70% more than Malignant case. This task helps in understanding our diagnosis result column.
+
+Graph Task: 
+```{r}
+ggplot(diagnosis_count) + geom_bar(aes(x = diagnosis, y = n), stat = "identity") + geom_hline(yintercept =mean(diagnosis_count$n)) + labs(x = "Diagnosis Result", y = "Count of Observation", title = "Summarize of Diagnosis Result Observations", caption = "Horizontal Line representing mean of observation")
+```
+
+From T8, we created a bar plot to visualize the summarization task results. This visualization helps us see the difference of observation and the mean of observations. We have a slightly biased dataset to analyze, but the bias should be neglegible. 
+
+2.  What variables presents significant difference in distribution between Benign and Malignant cases?
+Summarize Task:
+```{r}
+summarize_rad <- cancer_sample %>% group_by(diagnosis) %>% summarise(across(radius_mean, list(mean = mean, sd = sd, median = median, min = min, max = max)))
+print(summarize_rad)
+```
+From T1, Here we computed summary statistics of radius_mean for each group of diagnosis result. We have the mean, standard deviation, median, and (min, max) as range. This helps us understand about the necessary summary statistics between Benign and Malignant cases. We see that there is truly a significant difference between the cases in mean of radius.
+
+Graph Task: 
+
+```{r}
+ggplot(cancer_sample,aes(x = diagnosis, y = perimeter_mean)) + geom_boxplot() + labs(titie = "Mean Radius distribution versus Diagnosis Result", x = "Diagnosis Result", y = "Mean of Radius") + scale_y_log10()
+```
+
+From T6, note that the scaling of logarithmic base does not show significantly due to our concentrated data around a small interval. In this case, it is not appropriate to apply this scaling to the axis as it provides no value in visualization and only complicates explanation.
+
+
+3.  Is there any significant correlation between quantitative variables?
+Summarize Task:
+
+No related summarize task is found within the summarizing questions. We will attempt on T3 on `area_mean` instead.
+
+```{r}
+mean_area_mean = mean(cancer_sample$area_mean)
+sd_area_mean = sd(cancer_sample$area_mean)
+cancer_area <- cancer_sample %>% mutate(area_mean_fct = case_when(area_mean < mean_area_mean - 2 * sd_area_mean ~ "Very Small",
+                                                   area_mean < mean_area_mean - 1 * sd_area_mean ~ "Small",
+                                                   area_mean < mean_area_mean + 1 * sd_area_mean ~ "Normal",
+                                                   area_mean < mean_area_mean + 2 * sd_area_mean ~ "Large",
+                                                   TRUE ~ "Very Large")) %>% select(diagnosis, area_mean, area_mean_fct)
+cancer_area
+```
+
+Using T3, we have successfully separated `area_mean` variable into five categories, according to one and two standard deviation away from sample mean. This helps us organize our data and see extreme cases and potential outliers.
+
+Graph Task: 
+
+```{r}
+ggplot(cancer_sample, aes(x = radius_mean, y = area_mean)) + geom_point(alpha = 0.5) + labs(title = "Mean of Area versus Radius", x = "Mean of Radius", y = "Mean of Area")
+```
+
+From T7, we clearly see by a scatterplot that there is significant positive (sligtly non-linear) relationship between `area_mean` and `radius_mean`. This signifies that not all variables should be used in a linear model when fitting data. Changing the alpha value of points could help us in tidying the plot and seeing the density of points.
+
+4.  If we wish to predict on the outcome of diagnosis using the quantitative variables given, how accurate can we accomplish?
+Summarize Task:
+
+We will try use the cancer_area dataset to do T4. 
+
+```{r}
+cancer_area %>% group_by(diagnosis, area_mean_fct) %>% summarise(n = n(), .groups = 'drop') %>% mutate(prop = n/sum(n))
+
+```
+
+From T4, we can see interesting results when we count the observation and proportion of Diagnosis versus Mean area. We suprising see only five categories existing, with normal and small areas as benign but some large and very large area categories as malignant.
+
+Graph Task: 
+
+We will do T9 using this selected dataset. 
+
+```{r}
+ggplot(cancer_area) + geom_histogram(aes(x = area_mean, color = diagnosis), binwidth = 100)
+ggplot(cancer_area) + geom_histogram(aes(x = area_mean, color = diagnosis), binwidth = 1000)
+ggplot(cancer_area) + geom_histogram(aes(x = area_mean, color = diagnosis), binwidth = 10)
+
+```
+
+From T9, Three histogram is drawn with binwidth = 10, 100, 1000. Size of 1000 removes too much information from our dataset, while size of 10 have too many bins that it damages clarity of graph. Binwidth of 100 is preferred.
+
 <!----------------------------------------------------------------------------->
 
 ### 1.3 (2 points)
@@ -101,6 +184,13 @@ Based on the operations that you've completed, how much closer are you to answer
 
 <!------------------------- Write your answer here ---------------------------->
 
+Up to this point, we have done some preliminary studies on some specific data pairs and their relative impact on diagnosis results. We have not go through many predictive variables together yet. Our research questions can be refined a bit: 
+1.  Across the mean variables, what are the three highest correlated variables with the diagnosis results?
+2.  What variables presents significant difference in distribution between Benign and Malignant cases?
+3.  Is there any significant correlation with the highest correlated variable with the diagnosis results?
+4.  If we wish to predict on the outcome of diagnosis using some of the quantitative variables given, what is our test accuracy?
+
+Using our previous research questions, we made progress on question 2 and the preliminary results on one of the variables are promising.
 
 <!----------------------------------------------------------------------------->
 
@@ -119,7 +209,11 @@ A reminder of the definition of *tidy* data:
 Based on the definition above, can you identify if your data is tidy or untidy? Go through all your columns, or if you have \>8 variables, just pick 8, and explain whether the data is untidy or tidy.
 
 <!--------------------------- Start your work below --------------------------->
+```{r}
+head(cancer_sample)
+```
 
+We will pick 8 variables of interest: diagnosis, radius_mean, texture_mean, perimeter_mean, area_mean, smoothness_mean, compactness_mean, concavity_mean. Our data is tidy in that it satisfies all three definitions of tidy data. 
 <!----------------------------------------------------------------------------->
 
 ### 2.2 (4 points)
@@ -131,7 +225,24 @@ If your data is untidy, then tidy it! Then, untidy it back to it's original stat
 Be sure to explain your reasoning for this task. Show us the "before" and "after".
 
 <!--------------------------- Start your work below --------------------------->
+We would first untidy the data to violate 
 
+**Before Untidy it back**
+```{r}
+cancer_analysis_untidy <- cancer_sample %>% select(diagnosis, radius_mean, texture_mean, perimeter_mean, area_mean, smoothness_mean, compactness_mean, concavity_mean) %>% pivot_longer(cols = c(radius_mean,texture_mean), names_to = "mix",values_to = "mean")
+cancer_analysis_untidy
+```
+
+
+After we "untidy" it using pivot_longer,here we at least violates the second principle by mixing two variables together. The `mix` column is no longer a **variable**, and potentially violation of the third principle since each cell under `mix` shall not be considered as a **value**. 
+
+**After tidy it back**
+```{r}
+cancer_analysis <- cancer_analysis_untidy %>% pivot_wider(names_from = "mix",values_from = "mean")
+head(cancer_analysis)
+```
+
+Here after we "tidy" it back, we have the same dataset as originally. 
 <!----------------------------------------------------------------------------->
 
 ### 2.3 (4 points)
@@ -140,14 +251,16 @@ Now, you should be more familiar with your data, and also have made progress in 
 
 <!-------------------------- Start your work below ---------------------------->
 
-1.  *FILL_THIS_IN*
-2.  *FILL_THIS_IN*
+1.  Across the mean variables, what are the three highest correlated variables with the diagnosis results?
+4.  If we wish to predict on the outcome of diagnosis using some of the quantitative variables given, what is our test accuracy?
 
 <!----------------------------------------------------------------------------->
 
 Explain your decision for choosing the above two research questions.
 
 <!--------------------------- Start your work below --------------------------->
+
+My objective of this project is to search for a predictive model using some of the numerical variables on diagnosis results. These two research questions further define what I need to do in this situation.
 
 <!----------------------------------------------------------------------------->
 
@@ -157,6 +270,13 @@ Now, try to choose a version of your data that you think will be appropriate to 
 
 <!--------------------------- Start your work below --------------------------->
 
+```{r}
+cancer_analysis <- cancer_sample %>% select(diagnosis,ends_with("_mean")) %>% drop_na() %>%
+  mutate(diagnosis = case_when(diagnosis == "B" ~ 0,
+                               diagnosis == "M" ~ 1))
+```
+
+Here by using functions such as "select", "ends_with", "drop_na", "mutate", "case_when", we have a tidy dataset includes all numeric variables representing mean value, and we modified the diagnosis result to binary for easier linear modelling. 
 # Task 3: Modelling
 
 ## 3.0 (no points)
@@ -165,9 +285,9 @@ Pick a research question from 1.2, and pick a variable of interest (we'll call i
 
 <!-------------------------- Start your work below ---------------------------->
 
-**Research Question**: FILL_THIS_IN
+**Research Question**: If we wish to predict on the outcome of diagnosis using some of the quantitative variables given, what is our test accuracy?
 
-**Variable of interest**: FILL_THIS_IN
+**Variable of interest**: Diagnosis
 
 <!----------------------------------------------------------------------------->
 
@@ -183,6 +303,18 @@ Fit a model or run a hypothesis test that provides insight on this variable with
 
 <!-------------------------- Start your work below ---------------------------->
 
+Here we find the three highest correlated variable with the response variable diagnosis, and use them to fit a general linear model since we are looking at a binary response variable.
+```{r}
+diagnosis_col <- which(names(cancer_analysis) == "diagnosis")
+corr <- cor(cancer_analysis)[diagnosis_col, -diagnosis_col]
+print(head(sort(corr, decreasing = T),3))
+highest_cor_var = names(head(sort(corr, decreasing = T),3))
+
+model <- glm(diagnosis ~ concave_points_mean + perimeter_mean + radius_mean, data = cancer_analysis, family = "binomial")
+
+summary(model)
+```
+
 <!----------------------------------------------------------------------------->
 
 ## 3.2 (3 points)
@@ -194,6 +326,18 @@ Produce something relevant from your fitted model: either predictions on Y, or a
 -   Obtain your results using the `broom` package if possible. If your model is not compatible with the broom function you're needing, then you can obtain your results by some other means, but first indicate which broom function is not compatible.
 
 <!-------------------------- Start your work below ---------------------------->
+We shall first gather the in sample prediction error for this model: 
+
+```{r}
+library(broom)
+cancer_analysis$pred <- predict(model,type = "response")
+classification <- table(cancer_analysis$diagnosis, cancer_analysis$pred > 0.5)
+classification
+print(tidy(model))
+cat("The in sample prediction error is",sum(cancer_analysis$diagnosis !=  (cancer_analysis$pred > 0.5))/ length(cancer_analysis$diagnosis))
+```
+
+We generated a prediction column in the original dataset named `pred`. The output is a classification table that shows all of our correct and incorrect predictions. **False** and **0** indicates that the true result is Benign and we successfully predict Benign. Our diagonal terms are correct predictions but off-diagnal terms are incorrect predictions. The in sample prediction error is 0.08, which indicates our model made great progress. We also used the tidy() function in broom to see our model better.
 
 <!----------------------------------------------------------------------------->
 
@@ -209,6 +353,7 @@ Take a summary table that you made from Task 1, and write it as a csv file in yo
 -   **Reproducibility criteria**: You should be able to delete the csv file, and remake it simply by knitting this Rmd file.
 
 <!-------------------------- Start your work below ---------------------------->
+
 
 <!----------------------------------------------------------------------------->
 
